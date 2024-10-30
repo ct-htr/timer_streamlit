@@ -3,7 +3,6 @@ import time
 from datetime import datetime
 from datetime import timedelta
 import re
-from streamlit_extras.stylable_container import stylable_container
 
 st.set_page_config(layout="wide")
 
@@ -37,10 +36,12 @@ timerTab, stopwatchTab = st.tabs(["Timer", "Stopwatch"])
 inputH = inputM = inputS = 0
 timerTitle = ""
 start = end = datetime.now()
-last15 = last5 = endWarning = timeAppend = False
+last5 = timeAppend = False
+last15 = endWarning = True
 confirmExtend = False
 examStart = examEnd = "0000"
 last15String = "<p class=noticeText><b>Last 15 minutes.</b><br>You are not allowed to leave until the end of the exam.</p>"
+last5String = "<p class=noticeText><b>Last 5 minutes.</b><br>You are not allowed to leave until the end of the exam.</p>"
 endWarningString = "<h1 class=centerText>Time's up, pens down.</h1><p class=noticeText>Please stay in your seat and pay attention to further instructions.</p>"
 secBypass = 0
 #############
@@ -57,6 +58,11 @@ with st.sidebar:
         last15 = st.checkbox("last 15 minutes warning")
         last5 = st.checkbox("last 5 minutes warning")
         endWarning = st.checkbox("end of timer warning")
+        with st.expander("Warning text settings"):
+            st.write("HTML enabled. Use class=noticeText to center if needed.")
+            last15String = st.text_input("Last 15 minutes warning:", "<p class=noticeText><b>Last 15 minutes.</b><br>You are not allowed to leave until the end of the exam.</p>")
+            last15String = st.text_input("Last 5 minutes warning:", "<p class=noticeText><b>Last 5 minutes.</b><br>You are not allowed to leave until the end of the exam.</p>")
+            endWarningString = st.text_input("End warning:", "<h1 class=centerText>Time's up, pens down.</h1><p class=noticeText>Please stay in your seat and pay attention to further instructions.</p>")
         submitted = st.form_submit_button("Submit")
     
     tDelta = timedelta(seconds=1)
